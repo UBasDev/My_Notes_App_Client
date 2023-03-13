@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { RouterProvider } from "react-router-dom";
+import { CommonRouter } from "./routes/CommonRouter";
+import ScrollToTopComponent from "./Components/ScrollToTop/ScrollToTopComponent";
+import UseWindowHeightCustomHook from "./CustomHooks/UseWindowHeightCustomHook";
+import { Provider } from "react-redux";
+import store from "./Store/index";
+import SnackbarComponent from "./Components/Snackbar/SnackbarComponent";
 
-function App() {
+export default function App() {
+  const currentPageYOffset: number = UseWindowHeightCustomHook();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Provider store={store}>
+        <RouterProvider router={CommonRouter}></RouterProvider>
+        <SnackbarComponent />
+      </Provider>
+      <ScrollToTopComponent currentWindowHeight={currentPageYOffset} />
+    </>
   );
 }
-
-export default App;

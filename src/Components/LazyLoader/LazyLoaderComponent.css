@@ -1,0 +1,8 @@
+.LazyLoaderComponentWrapper {
+  position: relative;
+  z-index: 998;
+}
+.LazyLoaderComponentBox {
+  width: 100%;
+  z-index: 998;
+}

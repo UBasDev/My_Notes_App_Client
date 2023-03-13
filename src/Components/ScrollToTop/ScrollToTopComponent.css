@@ -1,0 +1,11 @@
+.ScrollToTopComponentWrapper * {
+  transition: 0.3s ease-out all;
+}
+.ScrollToTopComponentWrapper {
+  position: fixed;
+  right: 1%;
+  bottom: 1%;
+}
+.ScrollToTopComponentIconWrapper:hover {
+  transform: scale(1.05);
+}

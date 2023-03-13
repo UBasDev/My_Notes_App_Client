@@ -1,0 +1,14 @@
+.HeaderComponentWrapperHeader {
+  margin-bottom: 4rem;
+}
+
+.HeaderComponentBox1 {
+  display: flex;
+}
+.HeaderComponentIcon {
+  transition: 0.3s ease-out all;
+  cursor: pointer;
+}
+.HeaderComponentIcon:hover {
+  transform: scale(1.05);
+}

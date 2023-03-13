@@ -1,0 +1,7 @@
+.UnauthorizedHeaderDrawerComponentIcon {
+  transition: 0.3s ease-out all !important;
+}
+.UnauthorizedHeaderDrawerComponentListContainer:hover
+  .UnauthorizedHeaderDrawerComponentIcon {
+  transform: scale(1.1);
+}
