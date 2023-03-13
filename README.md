@@ -1,4 +1,4 @@
-# Hello guys, i am UCB. Development of this application is still ongoing.
+# Hello guys, i am UCB. Development of this application is still ongoing :)
 
 
 
