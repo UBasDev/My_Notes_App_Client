@@ -1,0 +1,8 @@
+.RegisterComponentErrorMessages {
+  text-align: left;
+  color: red;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-style: italic;
+  padding: 0 0.1rem;
+}

@@ -1,6 +1,7 @@
 import { Slide, SlideProps, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { disableSnackbar } from "../../Store/Snackbar/SnackbarState";
+import configs from "../configs";
 
 function SlideTransition(props: SlideProps) {
   return <Slide {...props} direction="down" />;
@@ -18,7 +19,7 @@ const SnackbarComponent = (props: any): JSX.Element => {
   return (
     <Snackbar
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      autoHideDuration={3000}
+      autoHideDuration={configs.snackbarAutoHideDuration}
       open={isSnackbarVisible}
       onClose={handleClose}
       TransitionComponent={SlideTransition}

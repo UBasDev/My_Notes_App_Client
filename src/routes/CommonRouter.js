@@ -7,14 +7,19 @@ import RegisterAction from "../Router/RouterActions/RegisterAction";
 import ProtectedRoute from "./ProtectedRoute";
 import { lazy, Suspense } from "react";
 import AuthLayoutComponent from "../Layouts/AuthLayout/AuthLayoutComponent";
-import SpinnerComponent from "../Components/Spinner/SpinnerComponent";
-import { Box, CircularProgress, LinearProgress } from "@mui/material";
 import LazyLoaderComponent from "../Components/LazyLoader/LazyLoaderComponent";
+import LoginStep1Action from "../Router/RouterActions/LoginStep1Action";
+import LoginStep2Action from "../Router/RouterActions/LoginStep2Action";
 
 const MyNotesComponent = lazy(() =>
   import("../Pages/MyNotes/MyNotesComponent")
 );
-const LoginComponent = lazy(() => import("../Pages/Auth/Login/LoginComponent"));
+const LoginStep1Component = lazy(() =>
+  import("../Pages/Auth/Login/LoginStep1/LoginStep1Component")
+);
+const LoginStep2Component = lazy(() =>
+  import("../Pages/Auth/Login/LoginStep2/LoginStep2Component")
+);
 const RegisterComponent = lazy(() => import("../Pages/Register/Register"));
 const ForgetPasswordComponent = lazy(() =>
   import("../Pages/Auth/ForgetPassword/ForgetPasswordComponent")
@@ -49,8 +54,15 @@ const CommonRoutes = [
     children: [
       {
         lazyLoading: true,
-        path: "login",
-        element: <LoginComponent />,
+        path: "login_step1",
+        element: <LoginStep1Component />,
+        action: LoginStep1Action,
+      },
+      {
+        lazyLoading: true,
+        path: "login_step2",
+        element: <LoginStep2Component />,
+        action: LoginStep2Action,
       },
       {
         lazyLoading: true,

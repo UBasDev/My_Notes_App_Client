@@ -112,7 +112,7 @@ const HeaderComponent = (props: any): JSX.Element => {
             {choosedNavItems.map((item) => (
               <Button
                 onClick={() => {
-                  if (item.value == "Login") navigate("/auth/login");
+                  if (item.value == "Login") navigate("/auth/login_step1");
                   else if (item.value == "Register") navigate("/auth/register");
                 }}
                 key={item.key}

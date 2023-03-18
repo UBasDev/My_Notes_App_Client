@@ -14,6 +14,8 @@ import { useEffect, useState } from "react";
 import { Form, NavLink, useActionData } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { enableSnackbar } from "../../Store/Snackbar/SnackbarState";
+import RegisterFormValidation from "../../FormValidations/RegisterFormValidation";
+import "./Register.css";
 
 interface FormItemProps {
   index: number;
@@ -26,16 +28,38 @@ interface FormItemProps {
   inputType: string;
 }
 
+interface GenderFormInputProps {
+  key: string;
+  value: string;
+}
+
+interface RegisterFormProps {
+  email: string;
+  password: string;
+  username: string;
+  gender?: string;
+  name?: string;
+  lastname?: string;
+}
+
+interface MinorRegisterFormValidationProps {
+  status: boolean;
+  errorMessage: string;
+}
+
+export interface RegisterFormValidationProps {
+  email: MinorRegisterFormValidationProps;
+  username: MinorRegisterFormValidationProps;
+  password: MinorRegisterFormValidationProps;
+}
+
 const text1 = <h1>Create your UCB NOTES Account</h1>;
-const text2 = "Email";
-const text3 = "Username";
-const text4 = "Name";
-const text5 = "Lastname";
+
 const text6 = "Next";
 const text7 = "Password";
 const text8 = "Sign in instead";
 
-const genderSelectItems = [
+const genderSelectItems: ReadonlyArray<GenderFormInputProps> = [
   {
     key: "Male",
     value: "Male",
@@ -94,35 +118,112 @@ const formItems: ReadonlyArray<FormItemProps> = [
 ];
 
 const RegisterComponent = (props: any): JSX.Element => {
+  /** FORM VALIDATION */
+  const [formValidation, setFormValidation] =
+    useState<RegisterFormValidationProps>({
+      email: {
+        status: true,
+        errorMessage: "",
+      },
+      username: {
+        status: true,
+        errorMessage: "",
+      },
+      password: {
+        status: true,
+        errorMessage: "",
+      },
+    });
+
   /** API RESPONSE ERROR MESSAGE */
   const { apiResponseErrorMessage, ms }: any = useActionData() || {};
   const dispatch = useDispatch();
 
   /** GENDER SELECT INPUT */
-  const [genderSelectItem, setGenderSelectItem] = useState("");
+  const [genderSelectItem, setGenderSelectItem] = useState<string>("");
   const handleChange = (event: any) => {
     setGenderSelectItem(event.target.value);
   };
 
   /** PASSWORD TEXT INPUT */
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
   };
+  const renderErrorMessages = (inputName: string): JSX.Element | undefined => {
+    if (inputName == "email") {
+      return (
+        <b
+          className="RegisterComponentErrorMessages"
+          style={{
+            display: formValidation.email.status == false ? "block" : "none",
+          }}
+        >
+          {formValidation.email.errorMessage}
+        </b>
+      );
+    } else if (inputName == "username") {
+      return (
+        <b
+          style={{
+            display: formValidation.username.status == false ? "block" : "none",
+          }}
+          className="RegisterComponentErrorMessages"
+        >
+          {formValidation.username.errorMessage}
+        </b>
+      );
+    }
+  };
+  const renderPasswordErrorMessage = () => {
+    return (
+      <b
+        style={{
+          display: formValidation.password.status == false ? "block" : "none",
+        }}
+        className="RegisterComponentErrorMessages"
+      >
+        {formValidation.password.errorMessage}
+      </b>
+    );
+  };
   useEffect(() => {
     if (apiResponseErrorMessage)
       dispatch(enableSnackbar(apiResponseErrorMessage));
   }, [ms]);
+  const validateFormBeforeSubmit = (event: any) => {
+    const formData = new FormData(event.target);
+    const formValues: RegisterFormProps = Object.fromEntries(formData) as any;
+    const validationResults: RegisterFormValidationProps =
+      RegisterFormValidation(
+        formValues.email,
+        formValues.username,
+        formValues.password
+      );
+    console.log("VALİDATİON RESULT", validationResults);
+    if (
+      !validationResults.email.status ||
+      !validationResults.username.status ||
+      !validationResults.password.status
+    ) {
+      setFormValidation(validationResults);
+      event.preventDefault();
+    }
+  };
   return (
     <div>
       {text1}
-      <Form method="post" action="/auth/register" onSubmit={(e: any) => {}}>
+      <Form
+        method="post"
+        action="/auth/register"
+        onSubmit={validateFormBeforeSubmit}
+      >
         <Grid container rowSpacing={3} columnSpacing={2}>
           {formItems.map((formItem, index) => (
-            <Grid item xs={formItem.gridWidth}>
+            <Grid key={formItem.index} item xs={formItem.gridWidth}>
               <FormControl sx={{ width: "100%" }} variant="filled">
                 <InputLabel
                   sx={{ fontSize: "medium" }}
@@ -146,6 +247,7 @@ const RegisterComponent = (props: any): JSX.Element => {
                     </InputAdornment>
                   }
                 />
+                {renderErrorMessages(formItem.inputName)}
               </FormControl>
             </Grid>
           ))}
@@ -183,6 +285,7 @@ const RegisterComponent = (props: any): JSX.Element => {
                   </InputAdornment>
                 }
               />
+              {renderPasswordErrorMessage()}
             </FormControl>
           </Grid>
           <Grid item xs={6}>
@@ -215,7 +318,7 @@ const RegisterComponent = (props: any): JSX.Element => {
             </Button>
           </Grid>
           <Grid style={{ textAlign: "left" }} item xs={12}>
-            <NavLink to={"/auth/login"}>
+            <NavLink to={"/auth/login_step1"}>
               <Button
                 style={{
                   textTransform: "capitalize",

@@ -1,0 +1,18 @@
+.LoginStep2ComponentEmailReceived {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0 1rem;
+  border: 1px solid lightgray;
+  padding: 0.2rem 0.6rem;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.LoginStep2ComponentEmailReceived:hover {
+  background-color: rgb(238, 238, 238);
+}
+.LoginStep2ComponentBottomOfFormContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

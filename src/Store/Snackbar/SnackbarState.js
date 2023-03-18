@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import configs from "../../Components/configs";
 
 const initialState = {
   isSnackbarVisible: false,
@@ -14,7 +15,7 @@ const snackbarState = createSlice({
     },
     disableSnackbar: (state) => {
       state.isSnackbarVisible = false;
-      state.snackbarContent = "";
+      //state.snackbarContent = "";
     },
   },
 });
