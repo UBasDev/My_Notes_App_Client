@@ -1,0 +1,18 @@
+.SendMeEmailNotificationComponentWrapper * {
+  transition: 0.3s ease-out all;
+  overflow: hidden;
+}
+.SendMeEmailNotificationComponentWrapper {
+  transition: 0.3s ease-out all;
+  position: fixed;
+  right: 1%;
+  bottom: 1%;
+  cursor: pointer;
+}
+.SendMeEmailNotificationComponentEmailIconHover {
+  padding: 0 0.5rem;
+  animation: emailNotificationAnimation 2s ease-out 0s infinite alternate;
+}
+.test11 {
+  animation: emailNotificationAnimation 2s ease-out 0s infinite alternate;
+}

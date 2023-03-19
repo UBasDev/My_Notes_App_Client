@@ -6,3 +6,7 @@
   font-style: italic;
   padding: 0 0.1rem;
 }
+.LoginStep1ComponentWrapper {
+  animation: scaleAnimationFromTopLeftCorner 0.3s ease-out 0s 1 alternate;
+  transform-origin: left top;
+}

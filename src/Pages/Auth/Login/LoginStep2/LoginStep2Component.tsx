@@ -4,7 +4,7 @@ import configs from "../../../../Components/configs";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./LoginStep2Component.css";
-import { Form, NavLink, redirect, useNavigate } from "react-router-dom";
+import { Form, NavLink, useActionData, useNavigate } from "react-router-dom";
 import {
   Button,
   FilledInput,
@@ -15,17 +15,44 @@ import {
   InputLabel,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { enableSnackbar } from "../../../../Store/Snackbar/SnackbarState";
+import LoginStep2FormValidation from "../../../../FormValidations/LoginStep2FormValidation";
 
 interface SessionStorageProps {
   usernameOrEmail: string;
 }
 
+export interface LoginStep2FormValidationProps {
+  inputName: string;
+  status: boolean;
+  errorMessage: string;
+}
+
+export interface LoginStep2FormProps {
+  password: string;
+}
+
 const text1 = "Password";
 const text2 = "Forgot password?";
 const text3 = "Login";
+const text4 = "Sorry, i don't have email provider yet";
 
 const LoginStep2Component = (props: any): JSX.Element => {
-  console.log("RENDERED");
+  const [formValidation, setFormValidation] = useState<
+    ReadonlyArray<LoginStep2FormValidationProps>
+  >([
+    {
+      inputName: "password",
+      status: true,
+      errorMessage: "",
+    },
+  ]);
+
+  /** API RESPONSE ERROR MESSAGE */
+  const { apiResponseErrorMessage, ms }: any = useActionData() || {};
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const [emailReceivedFromLoginStep1, setEmailReceivedFromLoginStep1] =
     useState<string>("");
@@ -52,7 +79,16 @@ const LoginStep2Component = (props: any): JSX.Element => {
   const validateFormBeforeSubmit = (event: any) => {
     //    event.preventDefault();
     const formData = new FormData(event.target);
-    console.log(Object.fromEntries(formData));
+    const formObject: LoginStep2FormProps = Object.fromEntries(formData) as any;
+    const results: ReadonlyArray<LoginStep2FormValidationProps> =
+      LoginStep2FormValidation(formObject.password);
+    setFormValidation(results);
+    for (let i: number = 0; i < results.length; i++) {
+      if (results[i].status == false) {
+        event.preventDefault();
+        break;
+      }
+    }
   };
   /** PASSWORD TEXT INPUT */
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -62,8 +98,17 @@ const LoginStep2Component = (props: any): JSX.Element => {
   ) => {
     event.preventDefault();
   };
+  /** CATCH ERROR MESSAGE FROM ACTION */
+  useEffect(() => {
+    if (apiResponseErrorMessage)
+      dispatch(enableSnackbar(apiResponseErrorMessage));
+  }, [ms, apiResponseErrorMessage, dispatch]);
+
+  const onForgotPasswordClick = () => {
+    dispatch(enableSnackbar(text4));
+  };
   return (
-    <div>
+    <div className="LoginStep2ComponentWrapper">
       <h4 style={{ textAlign: "center" }}>Welcome</h4>
       <NavLink
         to={"/auth/login_step1"}
@@ -107,6 +152,7 @@ const LoginStep2Component = (props: any): JSX.Element => {
                 {text1}
               </InputLabel>
               <FilledInput
+                autoFocus
                 name="password"
                 sx={{ fontSize: "medium" }}
                 placeholder="Must be strong"
@@ -134,10 +180,24 @@ const LoginStep2Component = (props: any): JSX.Element => {
               />
               {/* {renderPasswordErrorMessage()} */}
             </FormControl>
+            {formValidation.map((item) =>
+              item.inputName == "password" && item.status == false ? (
+                <p className="LoginStep2ComponentErrorMessages">
+                  {item.errorMessage}
+                </p>
+              ) : null
+            )}
           </Grid>
           <Grid item xs={12}>
             <div className="LoginStep2ComponentBottomOfFormContainer">
-              <NavLink to={"/auth/forget-password"}>{text2}</NavLink>
+              <Button
+                onClick={onForgotPasswordClick}
+                type="button"
+                style={{ textTransform: "capitalize" }}
+                variant="contained"
+              >
+                {text2}
+              </Button>
               <Button
                 type="submit"
                 style={{ textTransform: "capitalize" }}

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 export default function UseEventListenerCustomHook(
   eventType,
   callback,
+  isCapture = false,
   element = window
 ) {
   const callbackRef = useRef(callback);
@@ -13,7 +14,9 @@ export default function UseEventListenerCustomHook(
   useEffect(() => {
     if (element == null) return;
     const handler = (e) => callbackRef.current(e);
-    element.addEventListener(eventType, handler);
+    element.addEventListener(eventType, handler, {
+      capture: isCapture,
+    });
     return () => element.removeEventListener(eventType, handler);
-  }, [eventType, element]);
+  }, [eventType, element, isCapture]);
 }

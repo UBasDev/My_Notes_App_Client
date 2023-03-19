@@ -3,7 +3,7 @@ import * as CryptoJS from "crypto-js";
 const getPageYOffset = (): number => {
   return 15;
 };
-const getCurrentUserInfoFromCookie = (): string => {
+const getCurrentUserTokenFromCookie = (): string => {
   return (
     document.cookie
       .match(
@@ -13,6 +13,31 @@ const getCurrentUserInfoFromCookie = (): string => {
       )
       ?.pop() || ""
   );
+};
+const getCurrentUserEmail = (): string => {
+  const currentUserToken: string = getCurrentUserTokenFromCookie();
+  var base64Url: string = currentUserToken.split(".")[1];
+  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split("")
+      .map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
+
+  return JSON.parse(jsonPayload).email;
+};
+const clearAllCookies = () => {
+  const cookies = document.cookie.split(";");
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i];
+    const eqPos = cookie.indexOf("=");
+    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  }
 };
 const getTotalMillisecondsUntilNow = (): number => {
   return Date.now();
@@ -62,12 +87,14 @@ function removeValueFromSessionStorage(key: string): void {
 }
 const utils = {
   getPageYOffset,
-  getCurrentUserInfoFromCookie,
+  getCurrentUserTokenFromCookie,
+  getCurrentUserEmail,
   getTotalMillisecondsUntilNow,
   setHashedValueToLocalStorage,
   getHashedValueFromLocalStorageAndConvertToString,
   setHashedValueToSessionStorage,
   getHashedValueFromSessionStorageAndConvertToString,
   removeValueFromSessionStorage,
+  clearAllCookies,
 };
 export default utils;

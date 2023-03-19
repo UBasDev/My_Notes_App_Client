@@ -3,21 +3,12 @@ import {
   Box,
   Button,
   CssBaseline,
-  Divider,
   Drawer,
   IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import utils from "../../utils";
 import { useNavigate } from "react-router-dom";
 import HeaderDrawerComponent from "./HeaderDrawer/HeaderDrawerComponent";
@@ -56,6 +47,10 @@ const authorizedNavItems: ReadonlyArray<NavItemProps> = [
     key: 1,
     value: "MyNotes",
   },
+  {
+    key: 2,
+    value: "Logout",
+  },
 ];
 
 const HeaderComponent = (props: any): JSX.Element => {
@@ -63,21 +58,34 @@ const HeaderComponent = (props: any): JSX.Element => {
   const [choosedNavItems, setChoosedNavItems] = useState<
     ReadonlyArray<NavItemProps>
   >([]);
-  const isUserLoggedIn = utils.getCurrentUserInfoFromCookie();
+
   const chooseNavItemsIfUserLoggedIn = () => {
+    const isUserLoggedIn: boolean = utils.getCurrentUserTokenFromCookie()
+      ? true
+      : false;
     setChoosedNavItems(
       isUserLoggedIn ? authorizedNavItems : unAuthorizedNavItems
     );
   };
 
+  useEffect(() => {
+    chooseNavItemsIfUserLoggedIn();
+  }, []);
+
   const [mobileOpen, setMobileOpen] = useState(true);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
-    console.log("MOBILE OPEN", mobileOpen);
   };
-  useEffect(() => {
-    chooseNavItemsIfUserLoggedIn();
-  });
+  const onNavItemClick = (item: NavItemProps) => {
+    if (item.value == "Login") navigate("/auth/login_step1");
+    else if (item.value == "Register") navigate("/auth/register");
+    else if (item.value == "Logout") {
+      utils.clearAllCookies();
+      window.sessionStorage.clear();
+      window.localStorage.clear();
+      window.location.assign("/");
+    }
+  };
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -99,22 +107,27 @@ const HeaderComponent = (props: any): JSX.Element => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
+          {/* <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            sx={{ flexGrow: 1, display: { xs: "none", lg: "block" } }}
           >
             <span className="HeaderComponentIcon" onClick={() => navigate("/")}>
               UCB NOTES
             </span>
-          </Typography>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+          </Typography> */}
+          <Box
+            sx={{
+              display: {
+                xs: "block",
+                textAlign: "end",
+                flexGrow: 1,
+              },
+            }}
+          >
             {choosedNavItems.map((item) => (
               <Button
-                onClick={() => {
-                  if (item.value == "Login") navigate("/auth/login_step1");
-                  else if (item.value == "Register") navigate("/auth/register");
-                }}
+                onClick={() => onNavItemClick(item)}
                 key={item.key}
                 sx={{ color: "#fff" }}
               >
@@ -141,7 +154,8 @@ const HeaderComponent = (props: any): JSX.Element => {
               open={!mobileOpen}
               onClose={handleDrawerToggle}
               ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
+                keepMounted: true, // Better open performance on mobile
+                disableScrollLock: true,
               }}
               sx={{
                 display: { xs: "block", sm: "none" },
@@ -151,7 +165,7 @@ const HeaderComponent = (props: any): JSX.Element => {
                 },
               }}
             >
-              {<HeaderDrawerComponent isUserLoggedIn={isUserLoggedIn} />}
+              {<HeaderDrawerComponent />}
             </Drawer>
             <Drawer
               variant="persistent"
@@ -177,14 +191,11 @@ const HeaderComponent = (props: any): JSX.Element => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: { sm: mobileOpen ? `calc(100% - ${drawerWidth}px)` : "100%" },
         }}
       >
         <Toolbar />
-        <main>
-          <Typography paragraph>{props.children}</Typography>
-        </main>
+        <main>{props.children}</main>
       </Box>
     </Box>
   );

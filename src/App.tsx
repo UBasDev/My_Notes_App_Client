@@ -6,6 +6,7 @@ import UseWindowHeightCustomHook from "./CustomHooks/UseWindowHeightCustomHook";
 import { Provider } from "react-redux";
 import store from "./Store/index";
 import SnackbarComponent from "./Components/Snackbar/SnackbarComponent";
+import SendMeEmailNotificationComponent from "./Components/WelcomeNotification/SendMeEmailNotificationComponent";
 
 export default function App() {
   const currentPageYOffset: number = UseWindowHeightCustomHook();
@@ -17,6 +18,7 @@ export default function App() {
         <SnackbarComponent />
       </Provider>
       <ScrollToTopComponent currentWindowHeight={currentPageYOffset} />
+      <SendMeEmailNotificationComponent />
     </>
   );
 }

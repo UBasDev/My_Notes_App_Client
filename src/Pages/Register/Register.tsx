@@ -214,7 +214,7 @@ const RegisterComponent = (props: any): JSX.Element => {
     }
   };
   return (
-    <div>
+    <div className="RegisterComponentWrapper">
       {text1}
       <Form
         method="post"

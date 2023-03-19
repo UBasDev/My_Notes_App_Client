@@ -130,3 +130,25 @@ input {
 input::placeholder {
   font-size: small;
 }
+@keyframes scaleAnimationFromTopLeftCorner {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes emailNotificationAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  80% {
+    transform: rotate(0deg);
+  }
+  90% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(-15deg);
+  }
+}

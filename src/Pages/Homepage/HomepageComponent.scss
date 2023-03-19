@@ -1,0 +1,49 @@
+.HomepageComponentMainContainer{
+    background-image: url('/public/images/homepageBanners/homepageBanner.jpg');
+            background-repeat: no-repeat;
+            background-origin: border-box;
+            background-size: 100% 100%;
+            background-position: center center;
+            background-attachment: fixed;
+            position: relative;
+            max-height: 57rem
+}
+.HomepageComponentMainText{
+    padding: 1rem 1rem;
+            margin: 0;
+            color: white;
+            font-style: italic
+}
+.HomepageComponentMainText2{
+    color: #FFFFFF;
+            text-align: center;
+            text-shadow: 1px 1px lightgray;
+            font-weight: 400
+}
+.HomepageComponentSecondaryTexts{
+    color: #919191;
+            
+            text-align: center;
+            font-weight: 400
+}
+.HomepageComponentItemsContainers{
+    display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center
+}
+.HomepageComponentItemContainerIcons{
+    transition: .3s ease-out all;
+    cursor: pointer;
+}
+.HomepageComponentItemContainerIcons:hover{
+    color: rgb(96, 96, 255);
+    transform: scale(1.1);
+}
+.HomepageComponentItemContainerImages{
+    transition: .3s ease-out all;
+    cursor: pointer;
+}
+.HomepageComponentItemContainerImages:hover{
+    transform: scale(1.01);
+}

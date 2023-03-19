@@ -65,10 +65,12 @@ const LoginStep1Component = (props: any): JSX.Element => {
       }
     }
   };
+  /** CATCH ERROR MESSAGE FROM ACTION */
   useEffect(() => {
     if (apiResponseErrorMessage)
       dispatch(enableSnackbar(apiResponseErrorMessage));
   }, [ms, apiResponseErrorMessage, dispatch]);
+
   useEffect(() => {
     if (location.state?.from == "/auth/login_step2") {
       setDefaultEmailValue(location.state?.data || "");
@@ -78,7 +80,7 @@ const LoginStep1Component = (props: any): JSX.Element => {
     setDefaultEmailValue(event.target.value);
   };
   return (
-    <>
+    <div className="LoginStep1ComponentWrapper">
       {text1}
       {text2}
       <Form method="post" action="/auth/login_step1" onSubmit={onFormSubmit}>
@@ -92,6 +94,7 @@ const LoginStep1Component = (props: any): JSX.Element => {
                 {text3}
               </InputLabel>
               <FilledInput
+                autoFocus
                 onChange={onInputChange}
                 value={defaultEmailValue || ""}
                 name="usernameOrEmail"
@@ -113,9 +116,9 @@ const LoginStep1Component = (props: any): JSX.Element => {
                 }
               />
             </FormControl>
-            {formValidation.map((item) =>
+            {formValidation.map((item, index) =>
               item.status == false ? (
-                <p className="LoginStep1ComponentErrorMessages">
+                <p key={index} className="LoginStep1ComponentErrorMessages">
                   {item.errorMessage}
                 </p>
               ) : null
@@ -151,7 +154,7 @@ const LoginStep1Component = (props: any): JSX.Element => {
           </Grid>
         </Grid>
       </Form>
-    </>
+    </div>
   );
 };
 export default LoginStep1Component;

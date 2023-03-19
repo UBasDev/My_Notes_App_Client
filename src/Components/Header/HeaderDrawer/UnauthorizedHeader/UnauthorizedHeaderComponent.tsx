@@ -56,13 +56,14 @@ const unAuthorizedNavItems1: ReadonlyArray<ItemProps> = [
 ];
 
 const UnauthorizedHeaderDrawerComponent = (props: any): JSX.Element => {
+  console.log("UNAUTHORIZED");
   const goToLinks = (link: string): void => {
     window.open(link);
   };
   return (
     <div>
       <Box sx={{ textAlign: "center" }}>
-        <h3>Welcome XXX</h3>
+        <h4>My Social Media</h4>
       </Box>
       <Divider />
       <List>

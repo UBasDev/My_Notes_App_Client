@@ -4,12 +4,13 @@ import NotFoundComponent from "../Components/NotFound/NotFoundComponent";
 import CommonErrorComponent from "../Components/Errors/CommonError";
 import HomepageComponent from "../Pages/Homepage/HomepageComponent";
 import RegisterAction from "../Router/RouterActions/RegisterAction";
-import ProtectedRoute from "./ProtectedRoute";
 import { lazy, Suspense } from "react";
 import AuthLayoutComponent from "../Layouts/AuthLayout/AuthLayoutComponent";
 import LazyLoaderComponent from "../Components/LazyLoader/LazyLoaderComponent";
 import LoginStep1Action from "../Router/RouterActions/LoginStep1Action";
 import LoginStep2Action from "../Router/RouterActions/LoginStep2Action";
+import ProtectedRoutesOnlyAuthenticated from "./ProtectedRoutesOnlyAuthenticated";
+import ProtectedRoutesOnlyNotAuthenticated from "./ProtectedRoutesOnlyNotAuthenticated";
 
 const MyNotesComponent = lazy(() =>
   import("../Pages/MyNotes/MyNotesComponent")
@@ -40,7 +41,7 @@ const CommonRoutes = [
           },
           {
             path: "my_notes",
-            auth: true,
+            onlyAuthenticated: true,
             lazyLoading: true,
             element: <MyNotesComponent />,
           },
@@ -50,30 +51,37 @@ const CommonRoutes = [
   },
   {
     path: "/auth",
+    onlyNotAuthenticated: true,
     element: <AuthLayoutComponent />,
+    errorElement: <CommonErrorComponent />,
     children: [
       {
-        lazyLoading: true,
-        path: "login_step1",
-        element: <LoginStep1Component />,
-        action: LoginStep1Action,
-      },
-      {
-        lazyLoading: true,
-        path: "login_step2",
-        element: <LoginStep2Component />,
-        action: LoginStep2Action,
-      },
-      {
-        lazyLoading: true,
-        path: "register",
-        element: <RegisterComponent />,
-        action: RegisterAction,
-      },
-      {
-        lazyLoading: true,
-        path: "forget-password",
-        element: <ForgetPasswordComponent />,
+        errorElement: <CommonErrorComponent />,
+        children: [
+          {
+            lazyLoading: true,
+            path: "login_step1",
+            element: <LoginStep1Component />,
+            action: LoginStep1Action,
+          },
+          {
+            lazyLoading: true,
+            path: "login_step2",
+            element: <LoginStep2Component />,
+            action: LoginStep2Action,
+          },
+          {
+            lazyLoading: true,
+            path: "register",
+            element: <RegisterComponent />,
+            action: RegisterAction,
+          },
+          {
+            lazyLoading: true,
+            path: "forget-password",
+            element: <ForgetPasswordComponent />,
+          },
+        ],
       },
     ],
   },
@@ -85,9 +93,19 @@ const CommonRoutes = [
 
 const authMap = (routes) => {
   return routes.map((route) => {
-    if (route?.auth) {
-      console.log(route);
-      route.element = <ProtectedRoute>{route.element}</ProtectedRoute>;
+    if (route?.onlyAuthenticated) {
+      route.element = (
+        <ProtectedRoutesOnlyAuthenticated>
+          {route.element}
+        </ProtectedRoutesOnlyAuthenticated>
+      );
+    }
+    if (route?.onlyNotAuthenticated) {
+      route.element = (
+        <ProtectedRoutesOnlyNotAuthenticated>
+          {route.element}
+        </ProtectedRoutesOnlyNotAuthenticated>
+      );
     }
     if (route?.lazyLoading) {
       route.element = (
