@@ -8,6 +8,33 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 
+const HomepageComponentImages = [
+  {
+    key: 0,
+    alt: "note1",
+    src: "/images/homepageImages/note1.jpg",
+    icon: <TextSnippetIcon />,
+  },
+  {
+    key: 0,
+    alt: "note1",
+    src: "/images/homepageImages/note2.jpg",
+    icon: <FormatListBulletedIcon />,
+  },
+  {
+    key: 0,
+    alt: "note1",
+    src: "/images/homepageImages/note3.jpg",
+    icon: <AddAPhotoIcon />,
+  },
+  {
+    key: 0,
+    alt: "note1",
+    src: "/images/homepageImages/note4.jpg",
+    icon: <KeyboardVoiceIcon />,
+  },
+];
+
 const HomepageComponent = (props: any): JSX.Element => {
   const { width } = useWindowSizeCustomHook();
   /** REMOVE SESSION VALUE LIKE GARBAGE COLLECTOR */
@@ -65,6 +92,7 @@ const HomepageComponent = (props: any): JSX.Element => {
               Add notes, lists, photos and sounds to UCB Notes.
             </h2>
           </Grid>
+
           <Grid item xs={12} style={{ padding: "0 2rem" }}>
             <Grid container justifyContent={"center"} columnGap={2}>
               <Grid item xs={6} lg={3}>
@@ -75,6 +103,7 @@ const HomepageComponent = (props: any): JSX.Element => {
                     height="250px"
                     width={"100%"}
                     alt="note1"
+                    loading="lazy"
                   />
                   <p>
                     <TextSnippetIcon className="HomepageComponentItemContainerIcons" />
@@ -89,6 +118,7 @@ const HomepageComponent = (props: any): JSX.Element => {
                     height="250px"
                     width={"100%"}
                     alt="note2"
+                    loading="lazy"
                   />
                   <p>
                     <FormatListBulletedIcon className="HomepageComponentItemContainerIcons" />
@@ -107,6 +137,7 @@ const HomepageComponent = (props: any): JSX.Element => {
                     height="250px"
                     width={"100%"}
                     alt="note3"
+                    loading="lazy"
                   />
                   <p>
                     <AddAPhotoIcon className="HomepageComponentItemContainerIcons" />
@@ -121,6 +152,7 @@ const HomepageComponent = (props: any): JSX.Element => {
                     height="250px"
                     width={"100%"}
                     alt="note4"
+                    loading="lazy"
                   />
                   <p>
                     <KeyboardVoiceIcon className="HomepageComponentItemContainerIcons" />
